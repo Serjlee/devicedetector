@@ -7,10 +7,10 @@ import (
 
 	"gotest.tools/assert"
 
+	. "github.com/Serjlee/devicedetector/parser"
+	"github.com/Serjlee/devicedetector/parser/client"
+	"github.com/Serjlee/devicedetector/parser/device"
 	regexp "github.com/dlclark/regexp2"
-	. "github.com/gamebtc/devicedetector/parser"
-	"github.com/gamebtc/devicedetector/parser/client"
-	"github.com/gamebtc/devicedetector/parser/device"
 )
 
 var dd, _ = NewDeviceDetector("regexes")

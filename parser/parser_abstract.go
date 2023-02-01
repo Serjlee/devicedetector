@@ -2,12 +2,14 @@ package parser
 
 import (
 	"errors"
-	"gopkg.in/yaml.v2"
+	"io/fs"
 	"io/ioutil"
+	"regexp"
 	"strconv"
 	"strings"
 
-	regexp "github.com/dlclark/regexp2"
+	"github.com/Serjlee/devicedetector/fsys"
+	"gopkg.in/yaml.v2"
 )
 
 const Unknown = "Unknown"
@@ -58,7 +60,13 @@ func ArrayContainsString(list []string, v string) bool {
 }
 
 func ReadYamlFile(file string, v interface{}) error {
-	data, err := ioutil.ReadFile(file)
+	var data []byte
+	var err error
+	if fsys.FileSystem != nil {
+		data, err = fs.ReadFile(fsys.FileSystem, file)
+	} else {
+		data, err = ioutil.ReadFile(file)
+	}
 	if err != nil {
 		return errors.New("not exists:" + file)
 	}
@@ -72,38 +80,22 @@ type MatchResult interface {
 
 type Regular struct {
 	Regex  string `yaml:"regex" json:"regex"`
-	Regexp *regexp.Regexp
+	Regexp *Regexp
 }
 
-func (r *Regular) Compile() *regexp.Regexp {
+func (r *Regular) Compile() *Regexp {
 	if r.Regexp == nil {
-		// $regex = '/(?:^|[^A-Z_-])(?:' . str_replace('/', '\/', $regex) . ')/i';
-		//str := `(?i)(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + r.Regex + ")"
-		rg := r.Regex
-		rg = strings.Replace(rg, `/`, `\/`, -1)
-		rg = strings.Replace(rg, `++`, `+`, -1)
-		rg = strings.Replace(rg, `\_`, `_`, -1)
-		str := `(?:^|[^A-Z0-9-_]|[^A-Z0-9-]_|sprd-)(?:` + rg + ")"
-		r.Regexp = regexp.MustCompile(str, regexp.IgnoreCase)
+		r.Regexp = NewRegexp(r.Regex)
 	}
 	return r.Regexp
 }
 
 func (r *Regular) IsMatchUserAgent(ua string) bool {
-	m, _ := r.Compile().MatchString(ua)
-	return m
+	return r.Compile().MatchString(ua)
 }
 
 func (r *Regular) MatchUserAgent(ua string) []string {
-	//return r.Compile().FindStringSubmatch(ua)
-	if match, err := r.Compile().FindStringMatch(ua); err == nil && match != nil {
-		matches := make([]string, match.GroupCount())
-		for i, g := range match.Groups() {
-			matches[i] = g.String()
-		}
-		return matches
-	}
-	return nil
+	return r.Compile().FindStringSubmatch(ua)
 }
 
 func MatchUserAgent(ua, regex string) []string {
@@ -142,13 +134,14 @@ func BuildVersion(versionString string, matches []string) string {
 	return ver
 }
 
-var(
-	tdReg = regexp.MustCompile(` TD$`, regexp.IgnoreCase)
+var (
+	tdReg = regexp.MustCompile(`(?i) TD$`)
 )
+
 func BuildModel(m string, matches []string) string {
 	model := BuildByMatch(m, matches)
 	model = strings.ReplaceAll(model, "_", " ")
-	model, _ = tdReg.Replace(model, "", 0, -1)
+	model = tdReg.ReplaceAllString(model, "")
 	if model == "Build" {
 		return ""
 	}
