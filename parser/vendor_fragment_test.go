@@ -14,7 +14,7 @@ func TestVendorParse(t *testing.T) {
 	}
 	var vendorParser, _ = NewVendor(filepath.Join(dir, FixtureFileVendor))
 	var list []VendorFixture
-	err := ReadYamlFile(`fixtures/vendorfragments.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/vendorfragments.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

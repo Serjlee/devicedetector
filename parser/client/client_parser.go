@@ -37,7 +37,7 @@ type ClientParserAbstract struct {
 
 func (c *ClientParserAbstract) Load(file string) error {
 	var v []*ClientReg
-	err := ReadYamlFile(file, &v)
+	err := ReadRegexFileFromMemory(file, &v)
 	if err != nil {
 		return err
 	}

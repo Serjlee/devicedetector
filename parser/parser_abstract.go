@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/fs"
 	"io/ioutil"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -49,24 +50,26 @@ func SetVersionTruncation(t int) {
 }
 
 func ArrayContainsString(list []string, v string) bool {
-	if list != nil {
-		for _, i := range list {
-			if i == v {
-				return true
-			}
+
+	for _, i := range list {
+		if i == v {
+			return true
 		}
 	}
+
 	return false
 }
 
-func ReadYamlFile(file string, v interface{}) error {
-	var data []byte
-	var err error
-	if fsys.FileSystem != nil {
-		data, err = fs.ReadFile(fsys.FileSystem, file)
-	} else {
-		data, err = ioutil.ReadFile(file)
+func ReadRegexFileFromMemory(file string, v interface{}) error {
+	data, err := fs.ReadFile(fsys.FileSystem, filepath.Join("regexes", file))
+	if err != nil {
+		return errors.New("not exists:" + file)
 	}
+	return yaml.Unmarshal(data, v)
+}
+
+func ReadYamlFileFromDisk(file string, v interface{}) error {
+	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return errors.New("not exists:" + file)
 	}

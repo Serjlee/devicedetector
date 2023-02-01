@@ -41,7 +41,7 @@ type DeviceParserAbstract struct {
 
 func (d *DeviceParserAbstract) Load(file string) error {
 	var v map[string]*DeviceReg
-	err := ReadYamlFile(file, &v)
+	err := ReadRegexFileFromMemory(file, &v)
 	if err != nil {
 		return err
 	}

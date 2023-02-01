@@ -1,7 +1,6 @@
 package devicedetector
 
 import (
-	"path/filepath"
 	"strings"
 
 	regexp "github.com/dlclark/regexp2"
@@ -49,12 +48,12 @@ type DeviceDetector struct {
 	SkipBotDetection      bool
 }
 
-func NewDeviceDetector(dir string) (*DeviceDetector, error) {
-	vp, err := NewVendor(filepath.Join(dir, FixtureFileVendor))
+func NewDeviceDetector() (*DeviceDetector, error) {
+	vp, err := NewVendor(FixtureFileVendor)
 	if err != nil {
 		return nil, err
 	}
-	osp, err := NewOss(filepath.Join(dir, FixtureFileOs))
+	osp, err := NewOss(FixtureFileOs)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +63,7 @@ func NewDeviceDetector(dir string) (*DeviceDetector, error) {
 		osParsers:    []OsParser{osp},
 	}
 
-	clientDir := filepath.Join(dir, "client")
+	clientDir := "client"
 	d.clientParsers = client.NewClientParsers(clientDir,
 		[]string{
 			client.ParserNameFeedReader,
@@ -75,7 +74,7 @@ func NewDeviceDetector(dir string) (*DeviceDetector, error) {
 			client.ParserNameLibrary,
 		})
 
-	deviceDir := filepath.Join(dir, "device")
+	deviceDir := "device"
 	d.deviceParsers = device.NewDeviceParsers(deviceDir,
 		[]string{
 			device.ParserNameHbbTv,
@@ -87,7 +86,7 @@ func NewDeviceDetector(dir string) (*DeviceDetector, error) {
 		})
 
 	d.botParsers = []BotParser{
-		NewBot(filepath.Join(dir, FixtureFileBot)),
+		NewBot(FixtureFileBot),
 	}
 
 	return d, nil

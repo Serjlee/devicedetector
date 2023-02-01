@@ -10,7 +10,7 @@ type VendorFragments struct {
 
 func NewVendor(file string) (*VendorFragments, error) {
 	var m map[string][]string
-	err := ReadYamlFile(file, &m)
+	err := ReadRegexFileFromMemory(file, &m)
 	if err != nil {
 		return nil, err
 	}

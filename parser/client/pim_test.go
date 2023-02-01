@@ -11,7 +11,7 @@ import (
 func TestPimParse(t *testing.T) {
 	ps := NewPim(filepath.Join(dir, FixtureFilePim))
 	var list []*ClientFixture
-	err := ReadYamlFile(`fixtures/pim.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/pim.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

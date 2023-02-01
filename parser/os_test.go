@@ -16,7 +16,7 @@ func TestOsParse(t *testing.T) {
 	var osParser, _ = NewOss(filepath.Join(dir, FixtureFileOs))
 
 	var list []OsFixture
-	err := ReadYamlFile(`fixtures/oss.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/oss.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

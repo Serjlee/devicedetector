@@ -11,7 +11,7 @@ import (
 func TestConsoleParse(t *testing.T) {
 	ps := NewConsole(filepath.Join(dir, FixtureFileConsole))
 	var list []*DeviceFixture
-	err := ReadYamlFile(`fixtures/console.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/console.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

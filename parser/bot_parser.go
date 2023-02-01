@@ -47,7 +47,7 @@ func (b *BotParserAbstract) DiscardDetails(v bool) {
 
 func (b *BotParserAbstract) Load(file string) error {
 	var v []*BotReg
-	err := ReadYamlFile(file, &v)
+	err := ReadRegexFileFromMemory(file, &v)
 	if err != nil {
 		return err
 	}

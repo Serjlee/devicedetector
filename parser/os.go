@@ -159,7 +159,7 @@ type Oss struct {
 
 func NewOss(file string) (*Oss, error) {
 	var v []*OsReg
-	err := ReadYamlFile(file, &v)
+	err := ReadRegexFileFromMemory(file, &v)
 	if err != nil {
 		return nil, err
 	}

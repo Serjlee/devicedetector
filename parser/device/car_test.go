@@ -11,7 +11,7 @@ import (
 func TestCarParse(t *testing.T) {
 	ps := NewCar(filepath.Join(dir, FixtureFileCar))
 	var list []*DeviceFixture
-	err := ReadYamlFile(`fixtures/car_browser.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/car_browser.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

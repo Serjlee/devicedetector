@@ -11,7 +11,7 @@ import (
 func TestMediaPlayerParse(t *testing.T) {
 	ps := NewMediaPlayer(filepath.Join(dir, FixtureFileMediaPlayer))
 	var list []*ClientFixture
-	err := ReadYamlFile(`fixtures/mediaplayer.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/mediaplayer.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}

@@ -13,7 +13,7 @@ import (
 	regexp "github.com/dlclark/regexp2"
 )
 
-var dd, _ = NewDeviceDetector("regexes")
+var dd, _ = NewDeviceDetector()
 
 func TestParseInvalidUA(t *testing.T) {
 	info := dd.Parse(`12345`)
@@ -70,7 +70,7 @@ func TestBot(t *testing.T) {
 		Bot BotMatchResult `yaml:"bot"`
 	}
 	var listBotTest []BotTest
-	err := ReadYamlFile(`fixtures/bots.yml`, &listBotTest)
+	err := ReadYamlFileFromDisk(`fixtures/bots.yml`, &listBotTest)
 	if err != nil {
 		t.Error(err)
 	}
@@ -182,7 +182,7 @@ func TestRegThread(t *testing.T) {
 		} else {
 			name = `smartphone-` + strconv.Itoa(i) + `.yml`
 		}
-		err := ReadYamlFile(`fixtures/`+name, &list)
+		err := ReadYamlFileFromDisk(`fixtures/`+name, &list)
 		if err == nil {
 			lists = append(lists, list)
 		}

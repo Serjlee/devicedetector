@@ -363,7 +363,7 @@ func NewBrowser(fileName string) *Browser {
 func (b *Browser) Load(file string) error {
 	b.verCache = make(map[string]*Version)
 	var v []*BrowserItem
-	err := ReadYamlFile(file, &v)
+	err := ReadRegexFileFromMemory(file, &v)
 	if err != nil {
 		return err
 	}

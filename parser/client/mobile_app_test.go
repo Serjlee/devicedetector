@@ -11,7 +11,7 @@ import (
 func TestMediaAppParse(t *testing.T) {
 	ps := NewMobileApp(filepath.Join(dir, FixtureFileMobileApp))
 	var list []*ClientFixture
-	err := ReadYamlFile(`fixtures/mobile_app.yml`, &list)
+	err := ReadYamlFileFromDisk(`fixtures/mobile_app.yml`, &list)
 	if err != nil {
 		t.Error(err)
 	}
